@@ -1,0 +1,113 @@
+BUILDING A DATAWAREHOUSE IN GOOGLE CLOUD PLATFORM 1 
+INTRODUCTION TO DATA ENGINEERING 
+BUILDING A DATA WAREHOUSE 
+BUILDING A DATA LAKE 
+
+
+BUILDING A DATAWAREHOUSE IN GOOGLE CLOUD PLATFORM 
+TOOLS TO BE USED 
+1. BIGQUERY 
+2. CLOUD SQL 
+3. GOOGLE CLOUD STORAGE 
+
+BIGQUERY FACTS 
+1. STORES DATA IN A DISTRIBUTED FILESYSTEM CALLED GOOGLE COLOSUIS 
+IT WAS INSPIRED FOR HADOOP FILE SYSTEM 
+ACCESS DATA VIA SQL INTERFACE 
+BIGQUERY PROCESSES DATA IN A DISTRIBUTED SQL EXECUTION ENGINE 
+
+BIGQUERY DATA LOCATION 
+PHYSICALLY LOCATED IN DIFFERENT COUNTRIES AND CITIES 
+GROUPED INTO REGIONS AND EACH REGION HAS ZONES 
+IE SAY SOUTH EAST ASIA 
+TWO ZONES CAN BE SINGAPORE AND JAKARTA 
+WHICH I CHOOSE JAKARTA AS BIGQUERY DATASET LOCATION 
+DATA IS STORED AND PROCESSED IN JAKARTA CLUSTERS 
+BigQuery is very good at storing large volumes of data and performing analysis 
+and processing immediately using the SQL interface.
+
+
+CREATING A DATASET IN BIGQUERY 
+EXAMPLE 
+REPAIRS 
+TENANT SURVEYS 
+ARREARS 
+
+PREPARING FOR DEVELOPING DATAWAREHOUSE 
+WE WILL NEED THE FOLLOWING 
+1. CLOUD SHELL 
+2. CHECK CREDENTIALS USING gcloud info 
+3. INITIALISE OUR CREDENTIALS USING gcloud init 
+4. WRITE CODE AND DATASETS 
+5. UPLOAD DATA FROM GCS from git 
+
+gcloud info & gcloud init command 
+
+gcloud info => checks the current setupv
+1. summary of installed compoenents, versions and configurations of google cloud sdk in system 
+2. It also lists the directories in your system's PATH environment variable,
+3. It looks like you have the Cloud SDK installed and configured, and that you have specified a project 
+(engexamspreparation) to use with the SDK.
+
+gcloud init ?? 
+a command that you can use to initialize the Google Cloud SDK on your local machine.
+it will prompt you to authenticate with your Google account, select a Google Cloud project to use, 
+and set the default configuration for the Cloud SDK.
+
+observations 
+gcloud init 
+=> create a new configuration (configuration name set it to personal-config)
+=> log into your account 
+=> choose email address used to sign in into google cloud or log in with new account 
+=> [1] 
+=> choose cloud project to use 
+=> [1] 
+=> done 
+
+TASKS 
+DEVELOPING A DATA WAREHOUSE W DOCUMENTATION  
+
+SCENARIOS 
+1. Maria wants to know the top two region IDs, ordered by the total capacity of the stations in that region.
+2. Wants be able to download the answers to my questions as CSV files to my local computer.
+3. The data source table is the station table, which is located in the CloudSQL-MySQL database.
+
+HOW TO THINK IN SUCH SITUATIONS 
+1. WHAT WILL YOU DO 
+2. WHAT GCP SERVICES WILL YOU USE ?? 
+3. HOW WILL YOU DO IT ? 
+
+PLANNING 
+1. SINCE THERE IS A SPECIFIC BUSINESS RULE, WHICH IS RANKING AND CALCULATING TOTAL CAPACITY 
+THERE IS THE NEED FOR SOME TRANSFORMATIONS. 
+
+NOW STARTING FROM SCRATCH 
+1. CREATE A MYSQL DATABASE -> EXTRACT MYSQL TO GCS -> LOAD GCS TO BIGQUERY -> CREATE A BIGQUERY DATA MART 
+
+NEED TO CREATE A MYSQL DATABASE IN CLOUD SQL 
+FIRST STEP => PREPARE A CLOUD SQL ENV 
+1. CREATE A CLOUD SQL INSTANCE 
+2. CONNECT TO MYSQL INSTANCE 
+3. CREATE MYSQL DATABASE 
+4. CREATE A TABLE IN MYSQL DATABASE 
+5. IMPORT CSV DATA INTO MYSQL DATABASE 
+
+STEP 1 
+gcloud sql instances create: This is the command to create a new Cloud SQL instance.
+mysql-instance-source: This is the name of the new Cloud SQL instance.
+database-version=MYSQL_5_7: This specifies the version of the MySQL database that will be used for the instance.
+tier=db-g1-small: This specifies the tier of the Cloud SQL instance.
+region=us-central1: This specifies the region where the Cloud SQL instance will be created.
+root-password=exper123: This sets the root password for the instance.
+availability-type=zonal: This specifies the availability type for the instance.
+storage-size=10GB: This specifies the storage size for the instance.
+Storage-type=HDD: This specifies the storage type for the instance.
+
+gcloud sql instances create mysql-instance-source \ 
+--database-version=MYSQL_5_7 \ 
+--tier=db-g1-small \ 
+--region=us-central1 \ 
+--root-password=exper123 \ 
+--availability-type=zonal \ 
+--storage-size=10GB \ 
+--storage-type=HDD 
