@@ -111,3 +111,5 @@ gcloud sql instances create mysql-instance-source \
 --availability-type=zonal \ 
 --storage-size=10GB \ 
 --storage-type=HDD 
+
+RUN THIS IN CLOUD SHELL ABOVE 
