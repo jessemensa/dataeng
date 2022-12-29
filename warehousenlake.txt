@@ -113,3 +113,23 @@ gcloud sql instances create mysql-instance-source \
 --storage-type=HDD 
 
 RUN THIS IN CLOUD SHELL ABOVE 
+WAIT FOR ABOUT 5 MINS FOR IT TO FINISH 
+
+NOTES: WE WILL BE USING GITHUB AS A WAY TO ALSO LEARN AND UNDERSTAND GITHUB 
+WE HAVE UPLOADED THIS PROJECT INTO A GIT REPO USING THESE STEPS 
+git init 
+git add . 
+git commit -m "Initial commit" 
+git remote add origin  https://github.com/jessemensa/dataeng.git
+git push -u main origin 
+
+to update whatever is here to giithub right now 
+use 
+1. check git status 
+git status 
+git add . 
+git push -u origin 
+
+
+STEP 2 
+WE WILL CONNECT THIS TO A MYSQL INSTANCE 
