@@ -209,14 +209,33 @@ EDITOR => CREATE A FILE THAT LOADS DATA TO CLOUD STORAGE
 cloudstoragebucketname = engexamspreparation-bucket
 
 gcloud sql export csv mysql-instance-source \ 
-gs://$cloudstoragebucketname/mysql_export/stations20180101/stations.csv \ 
+gs://$cloudstoragebucketname/mysql_export/stations/20180101/stations.csv \ 
 --database=apps_db \ 
 --offload \ 
 --query='SELECT * FROM stations WHERE station_id <= 200;' 
 
 gcloud sql export mysql-instance-source \ 
+gs://$cloudstoragebucketname/mysql_export/stations/20180102/stations.csv \ 
 --database=apps_db \ 
 --offload \ 
 -- query='SELECT * FROM stations WHERE station_id <= 400;'
 
 EXPLAINED CODE ABOVE 
+gcloud sql export csv => exports data from cloud sql instance to a csv file 
+mysel-instance-source => specifies the name of the cloud sql instance 
+gs://$cloudstoragebucketname/mysql_export/stations/20180101/stations.csv \ 
+=> location in cloud storage where the csv file will be created 
+and specifying the cloud storage bucket 
+--database=apps_db \ 
+=> name of the database within cloud sql to be exported out of 
+-- offload \ => indicates the export should be done using a managed cloud sql export service 
+which can improve performance and reduce the load on the databases. 
+-- query => select rows that should be exported 
+
+
+IN CLOUD SHELL 
+NAVIGATE TO THE dataeng folder 
+navigate to datawarehouse folder 
+navigate to code folder 
+run file 
+=> sh cloudsqltocloudstorage.sh 
