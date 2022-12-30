@@ -268,6 +268,26 @@ NOTE: CHECK THE STATIONS TABLE TO SEE IF THE TABLE EXISTS NOW
 
 Create a BigQuery data mart 
 business users will access data from data marts 
+create a new dataset called name dm_regional_manager
+TASK: BUSINESS USER, WANTS TO KNOW THE TOP TWO REGION IDs ordered by total stations capacity in that region. 
+
 Now two options for the query results 
 1. Create a table 
 2. Create a view 
+
+both tables and views have merits and demerits 
+two merits of using a view 
+1. View costs no additional storage, just saves SQL formula 
+2. Real time, if you access the view then every time the underlying table changes, the view will get the latest update.
+
+drawbacks to views 
+1. views can be heavy,and when the underlying tables are large and there are many joins
+and aggregations in the view's query, you may end up having very heavy processing
+
+CONSIDER THIS SCENARIO 
+Imagine you have 5 upstream raw tables, each 1 PB in size, and your downstream consists of 1,000 views 
+accessing the 5 tables. You may end up processing the PBs of data repeatedly, and that's bad in terms of 
+both cost and performance.
+
+HOWEVER IN THIS SCENARIO => THE TABLE IS SMALL SO USE VIEWS 
+
