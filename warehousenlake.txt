@@ -352,3 +352,16 @@ NOW LOADING THE TRIPS INTO BIGQUERY
 => TRIPS HAS SUCCESSFULLY BEEN LOADED 
 
 NOW LOAD THE REGIONS TABLE INTO BIGQUERY 
+=> create python file to load the trips data 
+=> loadregions.py 
+=> QUERY IS SUCCESSFULL 
+
+HANDLE DAILY BATCH DATA LOADING FOR THE TRIPS TABLE 
+=> create python file to load trips 
+=> loadtripsdata1.py 
+some notes about this 
+The code will append new records to the trips table. This kind of data is called events. 
+In events data, every new record is a new event, which won't affect any existing data. 
+The nature of an event, once it happens, can't be updated and deleted. 
+This is similar to the real world; you can't change something that has happened.
+WRITE_APPEND is a natural way to load event data.
