@@ -239,3 +239,35 @@ navigate to datawarehouse folder
 navigate to code folder 
 run file 
 => sh cloudsqltocloudstorage.sh 
+
+AP PROBLEM I FACE WAS 
+=> error: Your local changes to the following files would be overwritten by merge:
+        datawarehouse/code/cloudsqltocloudstorage.sh
+
+SOLUTION 
+git reset --hard
+git pull 
+
+MAKE SURE TO DELETE SQL CLOUD INSTANCE WHEN DONE USING IT OR IT WILL RUN 
+COMMAND LINE 
+#gcloud sql instances delete mysql-instance-source
+
+
+PART 3 
+LOAD GCS TO BIGQUERY 
+USING BIGQUERY NOW, CREATE A NEW TABLE FROM THE BIGQUERY CONSOLE 
+NAME THAT TAKE raw_bikesharing 
+inside the dataset create a table and pick from 
+mysql_export/stations/20180101/stations.csv 
+table name is stations 
+schema option is Edit as text 
+write the following in the schema textbox 
+station_id:STRING,name:STRING,region_id:STRING,capacity:INTEGER 
+create table 
+NOTE: CHECK THE STATIONS TABLE TO SEE IF THE TABLE EXISTS NOW 
+
+Create a BigQuery data mart 
+business users will access data from data marts 
+Now two options for the query results 
+1. Create a table 
+2. Create a view 

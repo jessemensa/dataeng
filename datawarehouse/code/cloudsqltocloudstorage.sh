@@ -11,3 +11,8 @@ gs://engexamspreparation-bucket/mysql_export/stations/20180102/stations.csv \
 --database=apps_db \
 --offload \
 --query='SELECT * FROM stations WHERE station_id <=400;'
+
+SUCCESSFUL 
+
+NOW DELETE MYSQL INSTANCE FROM RUNNING 
+gcloud sql instances delete mysql-instance-source
