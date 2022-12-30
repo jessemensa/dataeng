@@ -344,3 +344,8 @@ LETS CREATE THE DATASETS USING PYTHON
 1. add a new dataset called dwh_bikesharing 
 2. add other datasets => raw_bikesharing and dm_bikesharing 
 (name the file createdatasets.py) and check the file 
+upload the code to github dn update the codebase in editor and run the code 
+
+NOW LOADING THE TRIPS INTO BIGQUERY 
+=> create a python file to load the trips data 
+=> loadtripsdata.py 
