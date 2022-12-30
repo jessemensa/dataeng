@@ -349,3 +349,6 @@ upload the code to github dn update the codebase in editor and run the code
 NOW LOADING THE TRIPS INTO BIGQUERY 
 => create a python file to load the trips data 
 => loadtripsdata.py 
+=> TRIPS HAS SUCCESSFULLY BEEN LOADED 
+
+NOW LOAD THE REGIONS TABLE INTO BIGQUERY 
