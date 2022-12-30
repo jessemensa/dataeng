@@ -9,7 +9,7 @@ def loadgcstobigquerysnapshotdata(GCS_URI, TABLE_ID, table_schema):
     client = bigquery.Client() 
     job_config = bigquery.LoadJobConfig(
         schema = table_schema,
-        source_format = bigquery.SourceFormat.SourceFormat.CSV, 
+        source_format = bigquery.SourceFormat.CSV, 
         write_disposition = 'WRITE_TRUNCATE'
     )
 
