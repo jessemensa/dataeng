@@ -9,15 +9,12 @@ def loadgcstobigquerysnapshotdata(GCS_URI, TABLE_ID, table_schema):
     client = bigquery.Client() 
     job_config = bigquery.LoadJobConfig(
         schema = table_schema,
-        source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON, 
+        source_format = bigquery.SourceFormat.SourceFormat.CSV, 
         write_disposition = 'WRITE_TRUNCATE'
     )
 
     load_job = client.load_table_from_uri(
         GCS_URI, TABLE_ID, job_config=job_config 
-    )
-    load_job = client.load_table_from_uri(
-        GCS_URI, TABLE_ID, job_config=job_config
     )
     load_job.result() 
     table = client.get_table(TABLE_ID) 
