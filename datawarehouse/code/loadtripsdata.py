@@ -62,7 +62,7 @@ def loadgcstobigqueryeventdata(GCS_URI, TABLE_ID, table_schema):
     load_job = client.load_table_from_uri(
         GCS_URI, TABLE_ID, job_config=job_config
     )
-    # WHERE WE GET THIS FROM, CHECK FOR EDITOR INSIDE 
+    # THIS DET THE QUERYJOB INSIDE 
     load_job.result() 
     # this go get the table based on table id, passes in the get the table 
     table = client.get_table(TABLE_ID) 
