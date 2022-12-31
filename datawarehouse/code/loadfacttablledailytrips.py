@@ -33,7 +33,7 @@ def createfacttable(PROJECT_ID, TARGET_TABLE_ID):
           FROM `%s`.raw_bikesharing.trips trips AS trips 
           JOIN `%s`.raw_bikesharing.stations stations AS stations
           ON trips.start_station_id = stations.station_id
-          WHERE DATE(start_date) = DATE('{%s}')
+          WHERE DATE(start_date) = DATE('%s')
           GROUP BY trip_date, start_station_id
           ;""" % (PROJECT_ID, load_date, load_date)
 
