@@ -365,3 +365,95 @@ In events data, every new record is a new event, which won't affect any existing
 The nature of an event, once it happens, can't be updated and deleted. 
 This is similar to the real world; you can't change something that has happened.
 WRITE_APPEND is a natural way to load event data.
+=> RUN FILE SUCCESSFULL 
+=> LETS RUN THIS SQL QUERY TO CHECK WHETHER RECORDS HAVE BE DUPLICATED OR NOT 
+SELECT count(*) cnt_trip_id, trip_id
+FROM `[your project id].raw_bikesharing.trips`
+GROUP BY trip_id
+HAVING cnt_trip_id > 1;
+
+HANDLE BATCH DATA LOADING FOR STATIONS TABLE 
+stations table, the approach will be different compared to the trips table. 
+This kind of table may have new records (INSERT), updated records (UPDATE), 
+and removed records (DELETE) records.
+Imagine a real-world bike station; a new bike station can be demolished, 
+capacities or the station name may change, or a new station may be established 
+in the region. So, this kind of data is called a snapshot. 
+Snapshot data is not event data. Snapshot data is an object or entity in the 
+real world; it doesn't happen, it's just there.
+WE WILL BE USING WRITE_TRUNCATE SO WE GET 
+# If the table already exists, BigQuery overwrites the table data and 
+uses the schema from the load.
+=> create a python file 
+=> loadstations.py 
+=> LOAD SUCCESSFULL 
+USE THIS QUERY TO CHECK IF THERE ARE ANY DUPLICATED RECORDS 
+SELECT
+station_id, count(*) as cnt_station
+FROM `[your project id].raw_bikesharing.stations`
+GROUP BY station_id
+HAVING cnt_station > 1;
+NO DATA WILL RETURN IF SUCCESSFULL 
+
+
+HOW TO KEEP HISTORICAL RECORDS WHILE MAINTAINING VALID INFORMATION 
+1. AFTER LOADING TO OUR TABLE IN raw_bikesharing, we will create another table that adds an 
+insert_date column (or you can add it as an ETL process, before loading to BigQuery). 
+The table will keep appending the new data daily. There will be duplication at the station_id level,
+but since we have the insert_date column, we can use the date information to get just the latest data snapshot
+2. Create a view that excludes the insert_date column and filter insert_date
+using the CURRENT_DATE() function, which returns today's date.
+3. The later user will access the view instead of the raw or historical tables. The user experience 
+will still be the same since they can use the common query SELECT * FROM stations and 
+obtain just today's station version.
+
+With this mechanism, any time business users have requests for data from historical periods, 
+you can always access the stations_history table.
+
+DRAW BACK => AFFECT STORAGE AND PERFORMANCE 
+
+OTHER APPROACHES 
+1. Incremental load using the MERGE BigQuery operation. MERGE is a unique operation in BigQuery. 
+It's a combination of INSERT if it does not exist, and UPDATE if there are changes.
+2. Slowly changing dimensions or SCDs for short, 
+SCDs are methods that you can follow to handle dimension data.
+
+
+DESIGNING DATA MODELLING FOR BIGQUERY 
+SOME ISSUES IF DATA WAREHOUSING PRINCIPLES ARE IGNORED 
+1. DATA IS DUPLICATED IN MANY LOCATIONS 
+2. SOME VALUES ARE NOT CONSISTENT ACROSS DIFFERENT USERS 
+3. THE COST OF PROCESSING IS HIGHLY INEFFICIENT 
+4. THE END USER DOESNT UNDERSTAND HOW TO USE THE DATAWAREHOUSE OBJECTS 
+5. THE BUSINESS DOESNT TRUST THE DATA 
+
+DATA MODELLING ?? 
+Process of representing the database objects in our real world or business perspective 
+Objects in bigquery can be datasets, tables or views. 
+Some of the most common end users are business analysts, data analysts, data scientists, BI users, 
+or any other roles that require access to the data for business purposes.
+
+DESIGNING DATA MODEL IN DATA WAREHOUSE 
+INMON VS KIMBALL METHODOLOGY 
+INMON => DATA DRIVEN 
+KIMBAL => USER DRIVEN 
+
+INMON => CENTRAL DATAWAREHOUSE WITH A SINGLE SOURCE OF TRUTH 
+DATA MODEL MUST BE NORMALISED TO THE LOWEST LEVEL SO DATA CAN BE HIGHLY CONSISTENT 
+INMON MODEL FOLLOWS A TOP DOWN APPROACH 
+DATAWAREHOUSE IS BUILT AS A SINGLE SOURCE OF TRUTH FOR ALL DOWNSTREAM DATA MARTS 
+SOMETIMES SEEN AS ENTERPRISE DATA WAREHOUSE 
+
+KIMBALL FOCUSES ON ANSWERING USER QUESTIONS AND FOLLOWS A BOTTOM UP APPROACH 
+THIS APPROACH KEEPS THE USER QUESTIONS IN MIND AND USES THE QUESTIONS AS A BASIS 
+TO BUILD NECESSARY TABLES. 
+THERE IS THE FACT TABLE AND DIMENSION TABLE 
+FACT TABLE => COLLECTION OF MEASUREMENTS OR METRICS IN A PREDEFINED GRANULARITY 
+DIMENSION TABLE => COLLECTION OF ENTITY ATTRIBUTES THAT SUPPORT THE FACT TABLE 
+
+CREATING A FACT TABLE 
+=> create loadfacttabledailytrips.py 
+=> run the file with some parameters date in the format yyyy-mm-dd 
+=> so need to provide one when calling the Python command like this 
+=> python loadfacttabledailytrips.py 2018-01-01
+=> run it again python loadfacttabledailytrips.py 2018-01-02
