@@ -19,12 +19,12 @@ def createfacttable(PROJECT_ID, TARGET_TABLE_ID):
           COUNT(trip_id) as total_trips,
           SUM(duration_sec) as sum_duration_sec,
           AVG(duration_sec) as avg_duration_sec
-          FROM `{0}.raw_bikesharing.trips` trips
-          JOIN `{1}.raw_bikesharing.stations` stations
+          FROM `{}.raw_bikesharing.trips` trips
+          JOIN `{}.raw_bikesharing.stations` stations
           ON trips.start_station_id = stations.station_id
           WHERE DATE(start_date) = DATE('{}')
           GROUP BY trip_date, start_station_id
-          ;""".format(PROJECT_ID, load_date)
+          ;""".format(PROJECT_ID=PROJECT_ID, load_date=load_date)
 
     query_job = client.query(sql, job_config=job_config)
 
