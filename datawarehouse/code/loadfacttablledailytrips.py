@@ -14,8 +14,7 @@ def createfacttable(PROJECT_ID, TARGET_TABLE_ID):
         write_disposition = 'WRITE_APPEND'
     )
 
-    sql = """
-    SELECT DATE(start_date) as trip_date,
+    sql = """SELECT DATE(start_date) as trip_date,
           start_station_id,
           COUNT(trip_id) as total_trips,
           SUM(duration_sec) as sum_duration_sec,
