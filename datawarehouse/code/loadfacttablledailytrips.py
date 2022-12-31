@@ -24,7 +24,7 @@ def createfacttable(PROJECT_ID, TARGET_TABLE_ID):
           ON trips.start_station_id = stations.station_id
           WhERE DATE(start_date) = DATE('{}')
           GROUP BY trip_date, start_station_id
-          ;""".format(PROJECT_ID=PROJECT_ID, load_date=load_date) 
+          ;""".format(PROJECT_ID=PROJECT_ID, load_date=load_date)
 
     query_job = client.query(sql, job_config=job_config) 
 
