@@ -2,6 +2,11 @@
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound 
 
+# HAVING ISSUES LOADING THIS TABLE IN
+# ERROR SAYS 
+# 403 Access Denied: Table 2018-01-01:raw_bikesharing.stations: User does not have permission to query 
+# table 2018-01-01:raw_bikesharing.stations, or perhaps it does not exist in location U
+
 # Construct a BigQuery client object.
 client = bigquery.Client()
 

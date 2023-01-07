@@ -457,3 +457,81 @@ CREATING A FACT TABLE
 => so need to provide one when calling the Python command like this 
 => python loadfacttabledailytrips.py 2018-01-01
 => run it again python loadfacttabledailytrips.py 2018-01-02
+=> HAVING ISSUES and dot it again 
+
+
+ALTERNATIVE DATA MODEL USING NESTED DATA TYPES 
+GOOGLE NORMALISED VS DENORMALISED DATA 
+MOVING ON 
+LOOKING AT at our bike-sharing region and station tables.
+THE ORIGINAL DATA IS DENORMALISED 
+And in our station table, each region has one or more stations.
+Looking at our dimension table in the dwh dataset, we decided to 
+denormalize the table to meet the star schema rule.
+The rule is that you can't have parent tables for a dimension table, or, 
+in other words, you can't join dimension tables to other dimension tables:
+since one region can have one or more stations, 
+we can store the stations as nested information under regions.
+QUERY TO CREATE IT 
+
+CREATE OR REPLACE TABLE `dwh_bikesharing.dim_stations_nested`
+AS
+SELECT
+      regions.region_id,
+      regions.name as region_name,
+      ARRAY_AGG(stations) as stations
+FROM
+`packt-data-eng-on-gcp.raw_bikesharing.regions` regions
+JOIN
+`packt-data-eng-on-gcp.raw_bikesharing.stations` stations
+ON CAST(regions.region_id AS STRING) = stations.region_id
+GROUP BY regions.region_id, 
+regions.name; 
+
+
+The downside of using nested tables is that it's not easy to digest for common SQL users. 
+Business users who are familiar with SQL might get confused with it the first time.
+
+
+STORE THE BUSINESS QUESTIONS RESULT IN TABLES 
+=> FACT IS TO ANSWER BUSINESS QUESTIONS WITH OUR FACT AND DIMENSIONS TABLE 
+
+1. How many bike trips take place daily ? 
+CREATE VIEW dm_operational.bike_trips_daily
+AS
+SELECT trip_date, SUM(total_trips) as total_trips_daily
+FROM dwh_bikesharing.fact_trips_daily
+GROUP BY trip_date;
+
+2. What is the daily average trip duration ?? 
+CREATE VIEW dm_operational.daily_avg_trip_duration
+AS
+SELECT trip_date, ROUND(AVG(avg_duration_sec)) as daily_
+average_duration_sec
+FROM dwh_bikesharing.fact_trips_daily
+GROUP BY trip_date;
+
+3.What are the top five station names of starting stations with the longest trip duration?
+CREATE VIEW dm_operational.top_5_station_by_longest_
+duration
+AS
+SELECT trip_date,  station_name, sum_duration_sec
+FROM dwh_bikesharing.fact_trips_daily
+JOIN dwh_bikesharing.dim_stations
+ON start_station_id = station_id
+WHERE trip_date = '2018-01-02'
+ORDER BY sum_duration_sec desc
+LIMIT 5;
+
+4. What are the top three region names that have the shortest total trip durations?
+CREATE VIEW dm_operational.top_3_region_by_shortest_duration
+AS
+SELECT trip_date, region_name, SUM(sum_duration_sec) as
+total_sum_duration_sec
+FROM dwh_bikesharing.fact_trips_daily
+JOIN dwh_bikesharing.dim_stations
+ON start_station_id = station_id
+WHERE trip_date = '2018-01-02'
+GROUP BY trip_date, region_name
+ORDER BY total_sum_duration_sec asc
+LIMIT 3;

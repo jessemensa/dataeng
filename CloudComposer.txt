@@ -1,0 +1,128 @@
+ORCHESTRATION IS A SET OF CONFIGURATION 
+AUTOMATE TASKS, JOBS AND THEIR DEPENDENCIES 
+
+DATABASE ORCHESTRATION => AUTOMATE TABLE CREATION PROCESS. 
+database system are tables, and one of the main differences between an application 
+database and a data warehouse is the creation of tables.
+
+CLOUD COMPOSER ENVIRONMENT 
+1. HOW IT WORKS 
+2. BEST PRACTICES TO CREATE ORCHESTRATION ENVIRONMENT 
+
+
+CLOUD COMPOSER 
+AIRFLOW 
+PROVISIONING CLOUD COMPOSER IN GCP 
+
+
+WORKFLOW MANAGEMENT TOOLS 
+1. HANDLING TASK DEPENDENCIES  
+2. SCHEDULER 
+3. SYSTEM INTEGRATION 
+
+INNER WORKINGS OF AIRFLOW 
+we need to do is to code in Python for handling the task dependencies, 
+schedule our jobs, and integrate with other systems. 
+AIRFLOW IS DESIGNED FOR YOU TO WRITE WORKFLOW USING CODE 
+
+There are a couple of good reasons why managing the workflow 
+using code is a good idea compared to the drag and drop tools. 
+1. you can automate a lot of development and deployment processes.
+2. Using code, it's easier for you to enable good testing practices. 
+3. All the configurations can be managed in a git repository.
+
+FIRST PYTHON AIRFLOW SCRIPT 
+dag = DAG('packt_dag', start_date=datetime(2021, 6, 12))
+first_task = DummyOperator(task_id='task_1')
+second_task = DummyOperator(task_id='task_2')
+third_task = DummyOperator(task_id='task_3')
+task_1>> task_2>> task_3
+
+EVERY SINGLE WORKFLOW IS CALLED A DAG => DIRECTED ACYCLIC WORKFLOW 
+COLLECTION OF TASKS CHAINED TOGETHER WITH THEIR DEPENDENCIES 
+
+-- DEFINED DAG IN PYTHON 
+-- The packt_dag DAG will run starting from June 6, 2021, and this is a part
+-- of how we schedule the DAG later
+dag = DAG('packt_dag', start_date=datetime(2021, 6, 12))
+
+-- define three DummyOperator tasks.
+-- SYSTEM INTEGRATION PART OF THE WORKFLOW 
+first_task = DummyOperator(task_id='task_1')
+second_task = DummyOperator(task_id='task_2')
+third_task = DummyOperator(task_id='task_3')
+
+-- Airflow as an open source product also has operators for other systems such as MySQL, PostgreSQL, 
+-- Oracle, email Simple Mail Transfer Protocol (SMTP), and many more
+
+-- BITSHIFT OPERATORS 
+-- THESE ARE JOBS AND TASK DEPENDENCIES PART OF WORKFLOW 
+-- >> INDICATES TASK DIRECTIONS 
+task_1>> task_2>> task_3
+
+DAG => AIRFLOW TERM OF A JOB CONFIGURATION 
+A job configuration contains a collection of tasks, scheduling information, and dependencies
+
+DAG RUN => A DAG Run is a term for when a DAG is running. When you trigger 
+or schedule a DAG to run, it is called a DAG Run.
+
+OPERATOR => Operators are collections of connections to different systems. 
+Airflow uses operators to define tasks.
+
+PROVISION CLOUD COMPOSER IN A GCP PROJECT 
+1. GCP CONSOLE NAVIGATION BAR 
+2  CLICK ON CLOUD COMPOSER UNDER BIGDATA 
+3. ENABLE API 
+4. CREATE ENVIRONMENT named Composer 1 
+5. choose composer environment name 
+6. choose us-central1 for location 
+7. Choose 3 for the Node count option. Three is the minimum number of nodes for Cloud Composer.
+8. Choose the any zone. 
+9. choose the n1-standard-1 machine type. 
+10. Input 20 for the disk size.
+11. In the Service account field, choose any service account that you see in the option. 
+That is your project default service account.
+12. Choose composer-1.16.6-airflow-1.10.15 for the Image version option. 
+note: The Image version option may or may not be there when you read this book. 
+Google might update the version and this version might no longer be there. 
+In that case, composer-1.x.x-airflow-1.10.X is generally better to ensure 
+compatibility with examples in this book. 
+13. Choose 3 for the Python version. 
+14. Keep the other options blank or default. 
+15. Before clicking CREATE, let's talk about the expected cost for this environment. 
+
+EXPECTED COST OF THE CLOUD ENVIRONMENT 
+The Cloud Composer cost is based on the cluster hours
+CREATE AN ENV FOR 7 HOURS FOR ONE DAY AND YOU WILL BE BILLED FOR 7 HOURS 
+you won't be billed by the number of DAGs or tasks that you have in a day.
+So, in our exercise, it depends on how fast you can finish your exercises in this chapter.
+if you think that you will finish this chapter in 7 days, then it means the cost is 7 days * cost/24 hours.
+ Cost/24 hours is around United States dollars (USD) $2.
+So, this means that the total Cloud Composer cost for 7 days is $14.
+and let's create our Cloud Composer environment by clicking the CREATE button. 
+
+
+AIRFLOW WEB UI 
+CLICK ON AIRFLOW WEB UI 
+ONE DAG CALLED AIRFLOW MONITORING 
+CLICK ON AIRFLOW MONITORING DAG 
+THIS WILL BRING UP THE DAG PAGE 
+
+DAG PAGE 
+1. TASK DEPENDENCIES 
+2. DAG RUNS 
+3. DAG CODE 
+
+GRAPH VIEW IS BETTER 
+AIRFLOW IS NOT BUILT AS DRAG AND DROP TOOL 
+USE PYTHON TO CREATE THE DAG 
+We will need to code in our own environment and submit the DAG to Cloud Composer.
+
+CLOUD COMPOSER BUCKET DIRECTORIES 
+Cloud Composer has specific folders in the GCS bucket for airflow management—for example, 
+all of our DAG code is the result of a Python file
+in the gs://{composer- bucket}/dags
+If you open this directory, you will find the airflow_ monitoring.py
+
+NAVIGATE TO CLOUD STORAGE TO SEE DETAILS OF CLOUD COMPOSER 
+=> DAGS => AIRFLOW_MONITORING.PY 
