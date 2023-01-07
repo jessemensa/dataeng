@@ -9,7 +9,7 @@
 # the DAG ID needs to be unique for the entire Airflow environment.
 
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
+# from airflow.operators.bash_operator import BashOperator
 from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 
