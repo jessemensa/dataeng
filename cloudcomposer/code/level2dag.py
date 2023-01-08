@@ -3,17 +3,17 @@
 from airflow import DAG
 # what is this operator doing ?? 
 # from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
-from airflow.providers.google.cloud.operators.sql import CloudSqlInstanceExportOperator
-# from airflow.providers.google.cloud.operators.cloud_sql import (
-#     CloudSQLCreateInstanceDatabaseOperator,
-#     CloudSQLCreateInstanceOperator,
-#     CloudSQLDeleteInstanceDatabaseOperator,
-#     CloudSQLDeleteInstanceOperator,
-#     CloudSQLExportInstanceOperator,
-#     CloudSQLImportInstanceOperator,
-#     CloudSQLInstancePatchOperator,
-#     CloudSQLPatchInstanceDatabaseOperator,
-# )
+# from airflow.providers.google.cloud.operators.sql import CloudSqlInstanceExportOperator
+from airflow.providers.google.cloud.operators.cloud_sql import (
+    CloudSQLCreateInstanceDatabaseOperator,
+    CloudSQLCreateInstanceOperator,
+    CloudSQLDeleteInstanceDatabaseOperator,
+    CloudSQLDeleteInstanceOperator,
+    CloudSQLExportInstanceOperator,
+    CloudSQLImportInstanceOperator,
+    CloudSQLInstancePatchOperator,
+    CloudSQLPatchInstanceDatabaseOperator,
+)
 # Using GCS storage for a BigQuery operator
 # from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
@@ -50,7 +50,7 @@ with DAG(
     start_date=days_ago(1),
 ) as dag:
     # The body will contain information about how you want to extract your data.
-    sql_export_task = CloudSqlInstanceExportOperator(
+    sql_export_task = CloudSQLExportInstanceOperator(
         project_id=GCP_PROJECT_ID, 
         body=export_body, 
         instance=INSTANCE_NAME, 
