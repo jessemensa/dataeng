@@ -126,3 +126,103 @@ If you open this directory, you will find the airflow_ monitoring.py
 
 NAVIGATE TO CLOUD STORAGE TO SEE DETAILS OF CLOUD COMPOSER 
 => DAGS => AIRFLOW_MONITORING.PY 
+you can develop your Airflow DAG in any environment—for example, from your 
+laptop using your favorite integrated development environment (IDE) or using Cloud Editor. 
+BUT the Python file needs to be stored in this directory.
+By uploading the correct DAG file to this directory, Airflow will automatically schedule 
+and run your DAG based on your configuration, and you can see the DAG in the UI.
+
+To summarize, your Airflow web UI will only be your monitoring dashboard, 
+but the actual code will be in the Cloud Composer GCS bucket. 
+Here is a list of important GCS bucket directories for our development:
+
+GCS DIRECTORIES                 
+gs://{composer-bucket}/dags 
+MAPPED LOCAL DIRECTORY 
+/home/airflow/gcs/dags 
+USAGE 
+DAGs 
+
+GCS DIRECTORIES 
+gs://{composer-bucket}/plugins 
+MAPPED LOCAL DIRECTORY 
+/home/airflow/gcs/plugins 
+USAGE 
+Airflow plugins 
+
+GCS DIRECTORIES 
+gs://{composer-bucket}/data 
+MAPPED LOCAL DIRECTORY 
+/home/airflow/gcs/data 
+USAGE 
+Workflow-related-data 
+
+GCS DIRECTORIES 
+gs://{composer-bucket}/logs 
+MAPPED LOCAL DIRECTORY 
+/home/airflow/gcs/logs 
+USAGE 
+Airflow task logs 
+
+
+BUILD PIPELINE ORCHESTRATION USING CLOUD COMPOSER 
+Level 1: Learn how to create a DAG and submit it to Cloud Composer.
+Level 2: Learn how to create a BigQuery DAG.
+Level 3: Learn how to use variables.
+Level 4: Learn how to apply task idempotency.
+Level 5: Learn how to handle late data.
+
+
+gcloud composer environments storage dags import --environment firstcompoer --location us-central1 --source level1dag.py
+CHECK THE AIRFLOW UI WEBSITE 
+CHECK GOOGLE CLOUD STORAGE FOR PYTHON FILE 
+level1dag.py is there 
+Your DAG Python file is automatically stored in the directory. Every DAG Python file in this 
+bucket directory will be automatically deployed as Airflow DAG and shown in the web UI by Airflow.
+Airflow will detect any file changes in this directory and will 
+affect the DAG without any additional steps needed.
+This also applies to deletion. If you somehow delete a file inside this directory, 
+your DAG will also be deleted, so don't do that.
+
+TO DELETE A DAG 
+gcloud composer environments storage dags delete --environment firstcompoer --location us-central1 --source level1dag.py
+
+AIRFLOW WEB UI 
+click on the square button => clear(DAG will re run) 
+your DAG will be retried or rerun at the task level, not the DAG level.
+Another important button on this task level page is the View Log button. 
+This will show you application-level logs from each independent task. 
+This is very important, and you will need this a lot for the development and debugging of your code.
+The log is independent for each task and DAG Run level, which means that if you already 
+have more than one DAG Run and an error occurred on a specific date
+ you can check a specific log on that date in a particular task to see the error message.
+If later you find an error and need to change your DAG Python file, what you need to do 
+is the same as when creating a new one using the gcloud command.
+since in Airflow 1.x there is no DAG versioning, the best practice in a 
+production environment is to label the DAG name with versions—for example, hello_world_ dag_v1. 
+This way, if you need to update your DAG, you will always create a new one labeled with a 
+new version, and then delete the old one after the new version is stable.
+
+
+2. SCHEDULING A PIPELINE FROM CLOUD SQL TO GCS AND BIGQUERY DATASETS 
+DAG TO EXTRACT DATA FROM CLOUD SQL 
+TO  GOOGLE CLOUD STORAGE BUCKET AND FROM GCS TO BIGQUERY 
+
+STEPS 
+1. WE NEED TO CREATE A SQL INSTANCE LIKE WE DID IN DATAWAREHOUSE 
+2. Configure the Cloud SQL service account identity and 
+access management (IAM) permission as GCS Object Admin.
+3. Create a stations table from the MySQL console.
+4. Import the stations table data from a comma-separated values (CSV) file.
+SELECT * FROM apps_db.stations LIMIT 10;
+
+next 
+Using a Cloud SQL operator to extract data to a GCS bucket
+Using GCS storage for a BigQuery operator
+Using BigQueryOperator for data transformation
+
+Using a Cloud SQL operator to extract data to a GCS bucket
+NAVIGATE TO LEVEL2 DAG 
+gcloud composer environments storage dags delete --environment firstcompoer --location us-central1 --source level2dag.py
+
+
