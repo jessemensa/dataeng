@@ -3,20 +3,25 @@
 from airflow import DAG
 # what is this operator doing ?? 
 # from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
-from airflow.providers.google.cloud.operators.cloud_sql import (
-    CloudSQLCreateInstanceDatabaseOperator,
-    CloudSQLCreateInstanceOperator,
-    CloudSQLDeleteInstanceDatabaseOperator,
-    CloudSQLDeleteInstanceOperator,
-    CloudSQLExportInstanceOperator,
-    CloudSQLImportInstanceOperator,
-    CloudSQLInstancePatchOperator,
-    CloudSQLPatchInstanceDatabaseOperator,
-)
+from airflow.providers.google.cloud.operators.sql import CloudSqlInstanceExportOperator
+# from airflow.providers.google.cloud.operators.cloud_sql import (
+#     CloudSQLCreateInstanceDatabaseOperator,
+#     CloudSQLCreateInstanceOperator,
+#     CloudSQLDeleteInstanceDatabaseOperator,
+#     CloudSQLDeleteInstanceOperator,
+#     CloudSQLExportInstanceOperator,
+#     CloudSQLImportInstanceOperator,
+#     CloudSQLInstancePatchOperator,
+#     CloudSQLPatchInstanceDatabaseOperator,
+# )
 # Using GCS storage for a BigQuery operator
-from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+# from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
+# from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 # BIGQUERY OPERATOR FOR DATA TRANSFORMATION 
-from airflow.contrib.operators.bigquery_operator import BigQueryOperator
+from airflow.providers.google.cloud.operators.bigquery import BigQueryOperator
+# from airflow.contrib.operators.bigquery_operator import BigQueryOperator
+
 from airflow.utils.dates import days_ago
 
 args = {
@@ -52,7 +57,7 @@ with DAG(
         task_id='sql_export_task'
     )
     # load stations table to bigquery 
-    gcs_to_bq_example = GoogleCloudStorageToBigQueryOperator(
+    gcs_to_bq_example = GCSToBigQueryOperator(
     task_id                             = "gcs_to_bq_example",
     bucket                              = 'engexamspreparation-bucket',
     source_objects                      = ['stations/stations.csv'],
