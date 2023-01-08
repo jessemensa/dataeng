@@ -2,7 +2,17 @@
 
 from airflow import DAG
 # what is this operator doing ?? 
-from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
+# from airflow.contrib.operators.gcp_sql_operator import CloudSqlInstanceExportOperator
+from airflow.providers.google.cloud.operators.cloud_sql import (
+    CloudSQLCreateInstanceDatabaseOperator,
+    CloudSQLCreateInstanceOperator,
+    CloudSQLDeleteInstanceDatabaseOperator,
+    CloudSQLDeleteInstanceOperator,
+    CloudSQLExportInstanceOperator,
+    CloudSQLImportInstanceOperator,
+    CloudSQLInstancePatchOperator,
+    CloudSQLPatchInstanceDatabaseOperator,
+)
 # Using GCS storage for a BigQuery operator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 # BIGQUERY OPERATOR FOR DATA TRANSFORMATION 
